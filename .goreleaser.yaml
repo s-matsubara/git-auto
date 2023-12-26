@@ -60,3 +60,8 @@ brews:
       name: homebrew-tap
       branch: main
       token: "{{ .Env.GITHUB_PERSONAL_AUTH_TOKEN }}"
+    caveats: |
+      If you want to register for git alias:
+      
+      git config --global alias.mergedd '!git-auto mergedd'
+      git config --global alias.auto-tag '!git-auto tag'
