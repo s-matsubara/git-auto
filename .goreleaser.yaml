@@ -67,5 +67,10 @@ brews:
     caveats: |
       If you want to register for git alias:
       
-      git config --global alias.mergedd '!git-auto mergedd'
-      git config --global alias.auto-tag '!git-auto tag'
+        git config --global alias.auto '!git-auto'
+        git config --global alias.mergedd '!git-auto delete-merged-branch'
+        git config --global alias.auto-tag '!git-auto tag'
+
+      To see how to use:
+      
+        git-auto -h
