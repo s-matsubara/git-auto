@@ -108,7 +108,7 @@ func (u *gitUsecase) setTag(tag string, msg string) error {
 func (u *gitUsecase) pushTag(tag string) error {
 	p, _ := os.Getwd()
 
-	cmd := exec.Command("git", "push", tag)
+	cmd := exec.Command("git", "push", "origin", tag)
 	cmd.Dir = p
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
