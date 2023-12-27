@@ -36,10 +36,8 @@ func (u *gitUsecase) VersionUp(target string, tagMsg string, isPush bool) (strin
 		if err != nil {
 			return "", err
 		}
-		break
 	default:
 		version = target
-		break
 	}
 
 	err = u.setTag(version, tagMsg)
@@ -210,7 +208,6 @@ func (u *gitUsecase) incrementVersion(version string, target string) string {
 		versions[0] = strconv.Itoa(num + 1)
 		versions[1] = "0"
 		versions[2] = "0"
-		break
 	case "minor":
 		num, _ := strconv.Atoi(versions[1])
 		versions[1] = strconv.Itoa(num + 1)
