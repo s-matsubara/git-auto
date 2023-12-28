@@ -22,8 +22,11 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version: stable
-      # More assembly might be required: Docker logins, GPG, etc. It all depends
-      # on your needs.
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          install-mode: "binary"
       - uses: goreleaser/goreleaser-action@v4
         with:
           # either 'goreleaser' (default) or 'goreleaser-pro':
