@@ -6,11 +6,13 @@ before:
     - go mod tidy
     # you may remove this if you don't need go generate
     - go generate ./...
+    - bash scripts/completions.sh
 builds:
   - env:
       - CGO_ENABLED=0
     goos:
       - linux
+      - windows
       - darwin
     flags:
       - -trimpath
@@ -24,6 +26,7 @@ archives:
     # this name template makes the OS and Arch compatible with the results of uname.
     files:
       - README.md
+      - completions/*
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -61,6 +64,9 @@ brews:
   - folder: Formula
     install: |
       bin.install "git-auto"
+      bash_completion.install "completions/git-auto.bash" => "git-auto"
+      zsh_completion.install "completions/git-auto.zsh" => "_git-auto"
+      fish_completion.install "completions/git-auto.fish"
     repository:
       owner: s-matsubara
       name: homebrew-tap
