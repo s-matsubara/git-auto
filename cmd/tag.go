@@ -18,9 +18,10 @@ var tagCmd = &cobra.Command{
 		isPush, _ := cmd.Flags().GetBool("push")
 		msg, _ := cmd.Flags().GetString("message")
 
-		if args[0] == "" {
+		if len(args) == 0 {
 			return errors.New("not found argument")
 		}
+
 		target := args[0]
 
 		u := usecase.NewGitUsecase()

@@ -200,6 +200,7 @@ func (u *gitUsecase) getIgnoreVersionPrefix(tag string) string {
 }
 
 func (u *gitUsecase) incrementVersion(version string, target string) string {
+	version = strings.Replace(version, " ", "", -1)
 	versions := strings.Split(version, ".")
 
 	switch target {
