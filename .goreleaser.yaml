@@ -47,9 +47,12 @@ changelog:
       - '^docs:'
       - '^test:'
 
-upx:
-  - enabled: true
-    lzma: true
+universal_binaries:
+  - replace: true
+
+#upx:
+#  - enabled: true
+#    lzma: true
 
 # The lines beneath this are called `modelines`. See `:help modeline`
 # Feel free to remove those if you don't want/use them.
