@@ -74,7 +74,10 @@ func (u *gitUsecase) DeleteMergedBranches() error {
 func (u *gitUsecase) tagVersionUp(tag string, target string) (string, error) {
 	check := u.checkVersionPrefix(tag)
 	version := u.getIgnoreVersionPrefix(tag)
-	version = u.incrementVersion(version, target)
+	version, err := u.incrementVersion(version, target)
+	if err != nil {
+		return "", err
+	}
 
 	if check {
 		version = "v" + version
@@ -199,9 +202,14 @@ func (u *gitUsecase) getIgnoreVersionPrefix(tag string) string {
 	return strings.Replace(tag, "v", "", -1)
 }
 
-func (u *gitUsecase) incrementVersion(version string, target string) string {
+func (u *gitUsecase) incrementVersion(version string, target string) (string, error) {
 	version = strings.Replace(version, " ", "", -1)
 	versions := strings.Split(version, ".")
+
+	re := regexp.MustCompile(`^\d+\.\d+\.\d+$`)
+	if !re.MatchString(version) {
+		return "", errors.New("does not match version")
+	}
 
 	switch target {
 	case "major":
@@ -218,5 +226,5 @@ func (u *gitUsecase) incrementVersion(version string, target string) string {
 		versions[2] = strconv.Itoa(num + 1)
 	}
 
-	return strings.Join(versions, ".")
+	return strings.Join(versions, "."), nil
 }

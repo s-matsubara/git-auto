@@ -45,6 +45,13 @@ func TestTagVersionUp(t *testing.T) {
 		t.Fatal(err)
 	}
 	assert.Equal(t, "v1.1.2", version)
+
+	tag = "v1.1.1aaa"
+	target = "patch"
+	_, err = tagVersionUp(tag, target)
+	if err == nil {
+		t.Fatal("error")
+	}
 }
 
 func TestCheckVersionPrefix(t *testing.T) {
@@ -71,23 +78,33 @@ func TestIgnoreVersionPrefix(t *testing.T) {
 
 func TestIncrementVersion(t *testing.T) {
 	var u gitUsecase
-	var incrementVersion func(version string, target string) string = (u).incrementVersion
+	var incrementVersion func(version string, target string) (string, error) = (u).incrementVersion
 
 	var version string
 	var target string
+	var err error
 
 	version = "1.1.1"
 	target = "major"
-	version = incrementVersion(version, target)
+	version, err = incrementVersion(version, target)
+	if err != nil {
+		t.Fatal(err)
+	}
 	assert.Equal(t, "2.0.0", version)
 
 	version = "1.1.1"
 	target = "minor"
-	version = incrementVersion(version, target)
+	version, err = incrementVersion(version, target)
+	if err != nil {
+		t.Fatal(err)
+	}
 	assert.Equal(t, "1.2.0", version)
 
 	version = "1.1.1"
 	target = "patch"
-	version = incrementVersion(version, target)
+	version, err = incrementVersion(version, target)
+	if err != nil {
+		t.Fatal(err)
+	}
 	assert.Equal(t, "1.1.2", version)
 }
