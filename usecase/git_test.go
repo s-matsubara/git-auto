@@ -7,7 +7,7 @@ import (
 
 func TestTagVersionUp(t *testing.T) {
 	var u gitUsecase
-	var tagVersionUp func(tag string, target string) (string, error) = (u).tagVersionUp
+	var tagVersionUp = (u).tagVersionUp
 
 	var tag string
 	var target string
@@ -56,7 +56,7 @@ func TestTagVersionUp(t *testing.T) {
 
 func TestCheckVersionPrefix(t *testing.T) {
 	var u gitUsecase
-	var checkVersionPrefix func(tag string) bool = (u).checkVersionPrefix
+	var checkVersionPrefix = (u).checkVersionPrefix
 
 	version := "v1.1.1"
 	check := checkVersionPrefix(version)
@@ -71,14 +71,14 @@ func TestIgnoreVersionPrefix(t *testing.T) {
 	var u gitUsecase
 
 	version := "v1.1.1"
-	var getIgnoreVersionPrefix func(str string) string = (u).getIgnoreVersionPrefix
+	var getIgnoreVersionPrefix = (u).getIgnoreVersionPrefix
 	version = getIgnoreVersionPrefix(version)
 	assert.Equal(t, "1.1.1", version)
 }
 
 func TestIncrementVersion(t *testing.T) {
 	var u gitUsecase
-	var incrementVersion func(version string, target string) (string, error) = (u).incrementVersion
+	var incrementVersion = (u).incrementVersion
 
 	var version string
 	var target string
