@@ -10,17 +10,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	flagPush         = "push"
+	flagPushShort    = "p"
+	flagMessage      = "message"
+	flagMessageShort = "m"
+)
+
 // tagCmd represents the tag command.
 var tagCmd = &cobra.Command{
 	Use:   "tag [<version>] [major|minor|patch]",
 	Short: "Auto increment tag version",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		isPush, err := cmd.Flags().GetBool("push")
+		isPush, err := cmd.Flags().GetBool(flagPush)
 		if err != nil {
 			return err
 		}
 
-		msg, err := cmd.Flags().GetString("message")
+		msg, err := cmd.Flags().GetString(flagMessage)
 		if err != nil {
 			return err
 		}
@@ -43,6 +50,6 @@ var tagCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(tagCmd)
-	tagCmd.Flags().BoolP("push", "p", false, "push")
-	tagCmd.Flags().StringP("message", "m", "", "message")
+	tagCmd.Flags().BoolP(flagPush, flagPushShort, false, flagPush)
+	tagCmd.Flags().StringP(flagMessage, flagMessageShort, "", flagMessage)
 }
