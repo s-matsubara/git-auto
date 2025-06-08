@@ -26,7 +26,7 @@ func (u *gitUsecase) VersionUp(target, tagMsg string, isPush bool) (string, erro
 	var err error
 
 	switch target {
-	case "major", "minor", "patch":
+	case VersionMajor, VersionMinor, VersionPatch:
 		var tag string
 		tag, err = u.getCurrentTag()
 		if err != nil {
@@ -228,7 +228,7 @@ func (u *gitUsecase) incrementVersion(version, target string) (string, error) {
 	}
 
 	switch target {
-	case "major":
+	case VersionMajor:
 		num, err := strconv.Atoi(versions[0])
 		if err != nil {
 			return "", err
@@ -236,14 +236,14 @@ func (u *gitUsecase) incrementVersion(version, target string) (string, error) {
 		versions[0] = strconv.Itoa(num + 1)
 		versions[1] = "0"
 		versions[2] = "0"
-	case "minor":
+	case VersionMinor:
 		num, err := strconv.Atoi(versions[1])
 		if err != nil {
 			return "", err
 		}
 		versions[1] = strconv.Itoa(num + 1)
 		versions[2] = "0"
-	case "patch":
+	case VersionPatch:
 		num, err := strconv.Atoi(versions[2])
 		if err != nil {
 			return "", err

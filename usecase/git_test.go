@@ -9,9 +9,6 @@ import (
 const (
 	versionBase       = "1.1.1"
 	versionBasePrefix = "v1.1.1"
-	versionMajor      = "major"
-	versionMinor      = "minor"
-	versionPatch      = "patch"
 )
 
 func TestTagVersionUp(t *testing.T) {
@@ -24,7 +21,7 @@ func TestTagVersionUp(t *testing.T) {
 	var err error
 
 	tag = versionBase
-	target = versionMajor
+	target = VersionMajor
 	version, err = tagVersionUp(tag, target)
 	if err != nil {
 		t.Fatal(err)
@@ -32,7 +29,7 @@ func TestTagVersionUp(t *testing.T) {
 	assert.Equal(t, "2.0.0", version)
 
 	tag = versionBase
-	target = versionMinor
+	target = VersionMinor
 	version, err = tagVersionUp(tag, target)
 	if err != nil {
 		t.Fatal(err)
@@ -40,7 +37,7 @@ func TestTagVersionUp(t *testing.T) {
 	assert.Equal(t, "1.2.0", version)
 
 	tag = versionBase
-	target = versionPatch
+	target = VersionPatch
 	version, err = tagVersionUp(tag, target)
 	if err != nil {
 		t.Fatal(err)
@@ -48,7 +45,7 @@ func TestTagVersionUp(t *testing.T) {
 	assert.Equal(t, "1.1.2", version)
 
 	tag = versionBasePrefix
-	target = versionPatch
+	target = VersionPatch
 	version, err = tagVersionUp(tag, target)
 	if err != nil {
 		t.Fatal(err)
@@ -56,7 +53,7 @@ func TestTagVersionUp(t *testing.T) {
 	assert.Equal(t, "v1.1.2", version)
 
 	tag = versionBasePrefix + "aaa"
-	target = versionPatch
+	target = VersionPatch
 	_, err = tagVersionUp(tag, target)
 	if err == nil {
 		t.Fatal("error")
@@ -94,7 +91,7 @@ func TestIncrementVersion(t *testing.T) {
 	var err error
 
 	version = versionBase
-	target = versionMajor
+	target = VersionMajor
 	version, err = incrementVersion(version, target)
 	if err != nil {
 		t.Fatal(err)
@@ -102,7 +99,7 @@ func TestIncrementVersion(t *testing.T) {
 	assert.Equal(t, "2.0.0", version)
 
 	version = versionBase
-	target = versionMinor
+	target = VersionMinor
 	version, err = incrementVersion(version, target)
 	if err != nil {
 		t.Fatal(err)
@@ -110,7 +107,7 @@ func TestIncrementVersion(t *testing.T) {
 	assert.Equal(t, "1.2.0", version)
 
 	version = versionBase
-	target = versionPatch
+	target = VersionPatch
 	version, err = incrementVersion(version, target)
 	if err != nil {
 		t.Fatal(err)
