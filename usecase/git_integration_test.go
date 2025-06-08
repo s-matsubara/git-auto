@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -100,6 +101,12 @@ func TestDeleteMergedBranchesIntegration(t *testing.T) {
 	}
 
 	// create branch and merge
+	defaultBranchBytes, err := exec.Command("git", "branch", "--show-current").Output()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defaultBranch := strings.TrimSpace(string(defaultBranchBytes))
+
 	if gitErr := gitCmd(dir, "checkout", "-b", "feature"); gitErr != nil {
 		t.Fatal(gitErr)
 	}
@@ -112,7 +119,7 @@ func TestDeleteMergedBranchesIntegration(t *testing.T) {
 	if gitErr := gitCmd(dir, "commit", "-m", "feature"); gitErr != nil {
 		t.Fatal(gitErr)
 	}
-	if gitErr := gitCmd(dir, "checkout", "master"); gitErr != nil {
+	if gitErr := gitCmd(dir, "checkout", defaultBranch); gitErr != nil {
 		t.Fatal(gitErr)
 	}
 	if gitErr := gitCmd(dir, "merge", "feature"); gitErr != nil {
