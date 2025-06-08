@@ -1,0 +1,43 @@
+[tools]
+go = "latest"
+"go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint" = "latest"
+
+[tasks.build]
+description = "Build for current OS/ARCH (go build equivalent)"
+run = "goreleaser build --snapshot --clean --single-target"
+
+[tasks.build-all]
+description = "Build for all target platforms using Goreleaser"
+run = "goreleaser build --snapshot --clean"
+
+[tasks.go-mod-edit]
+description = "Set go.mod's Go version to match the current Go version"
+run = "go mod edit -go=$(go version | cut -d' ' -f3 | cut -c3-)"
+
+[tasks.go-mod-update]
+description = "Update Go module dependencies to the latest versions"
+run = "go get -u ./..."
+
+[tasks.go-mod-tidy]
+description = "Clean up unused dependencies and add missing ones"
+run = "go mod tidy"
+
+[tasks.go-fmt]
+description = "Format all Go files"
+run = "go fmt ./..."
+
+[tasks.go-lint]
+description = "Run static analysis using golangci-lint"
+run = "golangci-lint run ./..."
+
+[tasks.go-test-all]
+description = "Run all Go tests in verbose mode with coverage reporting"
+run = "go test ./... -v -cover"
+
+[tasks.update-go-deps]
+description = "Update dependencies, sync Go version, and tidy the module"
+run = [
+  "mise run go-mod-edit",
+  "mise run go-mod-update",
+  "mise run go-mod-tidy"
+]
