@@ -23,6 +23,18 @@ jobs:
       - name: Fetch tags
         run: git fetch --force --tags
 
+      - name: Configure 1Password Service Account
+        uses: 1password/load-secrets-action/configure@v2
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+      - name: Load secret
+        uses: 1password/load-secrets-action@v2
+        with:
+          export-env: true
+        env:
+          GH_PAT: op://Develop/zstmszhqn7kiu3o3uxcfiumnou/credential
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -41,8 +53,4 @@ jobs:
           version: latest
           args: release --clean
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Your GoReleaser Pro key, if you are using the 'goreleaser-pro'
-          # distribution:
-          # GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
-          GITHUB_PERSONAL_AUTH_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_PAT }}
