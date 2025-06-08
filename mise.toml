@@ -1,3 +1,6 @@
+[settings]
+experimental = true
+
 [tools]
 go = "latest"
 "go:github.com/golangci/golangci-lint/v2/cmd/golangci-lint" = "latest"
