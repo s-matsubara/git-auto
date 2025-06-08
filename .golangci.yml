@@ -1,0 +1,126 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+  concurrency: 4
+  build-tags: []
+  go: "1.24.3"
+
+output:
+  formats:
+    text:
+      path: stdout
+
+linters:
+  enable:
+    # Core Go linters
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+
+    # Code quality
+    - gocyclo
+    - revive
+    - misspell
+    - unconvert
+    - unparam
+
+    # Security
+    - gosec
+
+    # Performance
+    - prealloc
+
+    # Style and best practices
+    - goconst
+    - gocritic
+    - godot
+    - nolintlint
+
+    # Additional useful linters
+    - copyloopvar
+
+  disable:
+    - exhaustive
+    - funlen
+    - lll
+    - wsl
+
+  settings:
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+      exclude-functions:
+        - fmt.Print
+        - fmt.Println
+        - fmt.Printf
+
+    gocyclo:
+      min-complexity: 15
+
+    misspell:
+      locale: US
+      ignore-rules:
+        - matsubara
+
+    gosec:
+      excludes:
+        - G204
+        - G304
+
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment
+
+    staticcheck:
+      checks: ["all"]
+
+    revive:
+      rules:
+        - name: exported
+          disabled: true
+        - name: package-comments
+          disabled: true
+
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+      disabled-checks:
+        - unnamedResult
+        - hugeParam
+
+    godot:
+      scope: declarations
+      exclude:
+        - "^\\s*//\\s*nolint"
+
+    nolintlint:
+      allow-unused: false
+      require-explanation: true
+      require-specific: true
+
+  exclusions:
+    rules:
+      - path: _test\.go
+        linters:
+          - gosec
+          - gocritic
+
+      - path: _test\.go
+        text: "comment on exported function"
+        linters:
+          - revive
+
+      - path: main\.go
+        text: "don't use global variables"
+        linters:
+          - gocritic
+
+issues:
+  max-same-issues: 3
