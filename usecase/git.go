@@ -10,6 +10,12 @@ import (
 	"strings"
 )
 
+const (
+	VersionMajor = "major"
+	VersionMinor = "minor"
+	VersionPatch = "patch"
+)
+
 type GitUsecase interface {
 	VersionUp(target, atgMsg string, isPush bool) (string, error)
 	DeleteMergedBranches() error
