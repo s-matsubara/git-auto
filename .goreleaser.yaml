@@ -1,3 +1,5 @@
+version: 2
+
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
 before:
@@ -61,8 +63,7 @@ universal_binaries:
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 brews:
-  - folder: Formula
-    install: |
+  - install: |
       bin.install "git-auto"
       bash_completion.install "completions/git-auto.bash" => "git-auto"
       zsh_completion.install "completions/git-auto.zsh" => "_git-auto"
