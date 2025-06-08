@@ -11,7 +11,7 @@ import (
 )
 
 type GitUsecase interface {
-	VersionUp(target string, atgMsg string, isPush bool) (string, error)
+	VersionUp(target, atgMsg string, isPush bool) (string, error)
 	DeleteMergedBranches() error
 }
 
@@ -21,13 +21,14 @@ func NewGitUsecase() GitUsecase {
 	return &gitUsecase{}
 }
 
-func (u *gitUsecase) VersionUp(target string, tagMsg string, isPush bool) (string, error) {
+func (u *gitUsecase) VersionUp(target, tagMsg string, isPush bool) (string, error) {
 	var version string
 	var err error
 
 	switch target {
 	case "major", "minor", "patch":
-		tag, err := u.getCurrentTag()
+		var tag string
+		tag, err = u.getCurrentTag()
 		if err != nil {
 			return "", err
 		}
@@ -71,7 +72,7 @@ func (u *gitUsecase) DeleteMergedBranches() error {
 	return nil
 }
 
-func (u *gitUsecase) tagVersionUp(tag string, target string) (string, error) {
+func (u *gitUsecase) tagVersionUp(tag, target string) (string, error) {
 	check := u.checkVersionPrefix(tag)
 	version := u.getIgnoreVersionPrefix(tag)
 	version, err := u.incrementVersion(version, target)
@@ -86,18 +87,21 @@ func (u *gitUsecase) tagVersionUp(tag string, target string) (string, error) {
 	return version, nil
 }
 
-func (u *gitUsecase) setTag(tag string, msg string) error {
+func (u *gitUsecase) setTag(tag, msg string) error {
 	var cmd *exec.Cmd
 	cmd = exec.Command("git", "tag", tag)
 	if msg != "" {
 		cmd = exec.Command("git", "tag", "-am", msg, tag)
 	}
 
-	p, _ := os.Getwd()
+	p, err := os.Getwd()
+	if err != nil {
+		return err
+	}
 	cmd.Dir = p
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
-	err := cmd.Run()
+	err = cmd.Run()
 
 	if err != nil {
 		return errors.New(stderr.String())
@@ -107,13 +111,16 @@ func (u *gitUsecase) setTag(tag string, msg string) error {
 }
 
 func (u *gitUsecase) pushTag(tag string) error {
-	p, _ := os.Getwd()
+	p, err := os.Getwd()
+	if err != nil {
+		return err
+	}
 
 	cmd := exec.Command("git", "push", "origin", tag)
 	cmd.Dir = p
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
-	err := cmd.Run()
+	err = cmd.Run()
 
 	if err != nil {
 		return errors.New(stderr.String())
@@ -123,7 +130,10 @@ func (u *gitUsecase) pushTag(tag string) error {
 }
 
 func (u *gitUsecase) getCurrentTag() (string, error) {
-	p, _ := os.Getwd()
+	p, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
 
 	cmd := exec.Command("git", "describe", "--tags", "--abbrev=0")
 	cmd.Dir = p
@@ -131,17 +141,20 @@ func (u *gitUsecase) getCurrentTag() (string, error) {
 	var stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
-	err := cmd.Run()
+	err = cmd.Run()
 
 	if err != nil {
 		return "", errors.New(stderr.String())
 	}
 
-	return strings.Replace(stdout.String(), "\n", " ", -1), nil
+	return strings.ReplaceAll(stdout.String(), "\n", " "), nil
 }
 
 func (u *gitUsecase) getMergedBranches() ([]string, error) {
-	p, _ := os.Getwd()
+	p, err := os.Getwd()
+	if err != nil {
+		return []string{}, err
+	}
 
 	cmd := exec.Command("git", "branch", "--merged")
 	cmd.Dir = p
@@ -149,7 +162,7 @@ func (u *gitUsecase) getMergedBranches() ([]string, error) {
 	var stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
-	err := cmd.Run()
+	err = cmd.Run()
 
 	if err != nil {
 		return []string{}, errors.New(stderr.String())
@@ -157,10 +170,10 @@ func (u *gitUsecase) getMergedBranches() ([]string, error) {
 
 	re := regexp.MustCompile(`^\*|main|master|development|staging|production`)
 
-	var targetBranches []string
 	branches := strings.Split(stdout.String(), "\n")
+	targetBranches := make([]string, 0, len(branches))
 	for _, branch := range branches {
-		branch = strings.Replace(branch, " ", "", -1)
+		branch = strings.ReplaceAll(branch, " ", "")
 		if re.MatchString(branch) {
 			continue
 		}
@@ -176,7 +189,10 @@ func (u *gitUsecase) getMergedBranches() ([]string, error) {
 }
 
 func (u *gitUsecase) deleteBranch(branch string) error {
-	p, _ := os.Getwd()
+	p, err := os.Getwd()
+	if err != nil {
+		return err
+	}
 
 	cmd := exec.Command("git", "branch", "-D", branch)
 	cmd.Dir = p
@@ -184,7 +200,7 @@ func (u *gitUsecase) deleteBranch(branch string) error {
 	var stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
-	err := cmd.Run()
+	err = cmd.Run()
 
 	if err != nil {
 		return errors.New(stderr.String())
@@ -199,11 +215,11 @@ func (u *gitUsecase) checkVersionPrefix(tag string) bool {
 }
 
 func (u *gitUsecase) getIgnoreVersionPrefix(tag string) string {
-	return strings.Replace(tag, "v", "", -1)
+	return strings.ReplaceAll(tag, "v", "")
 }
 
-func (u *gitUsecase) incrementVersion(version string, target string) (string, error) {
-	version = strings.Replace(version, " ", "", -1)
+func (u *gitUsecase) incrementVersion(version, target string) (string, error) {
+	version = strings.ReplaceAll(version, " ", "")
 	versions := strings.Split(version, ".")
 
 	re := regexp.MustCompile(`^\d+\.\d+\.\d+$`)
@@ -213,16 +229,25 @@ func (u *gitUsecase) incrementVersion(version string, target string) (string, er
 
 	switch target {
 	case "major":
-		num, _ := strconv.Atoi(versions[0])
+		num, err := strconv.Atoi(versions[0])
+		if err != nil {
+			return "", err
+		}
 		versions[0] = strconv.Itoa(num + 1)
 		versions[1] = "0"
 		versions[2] = "0"
 	case "minor":
-		num, _ := strconv.Atoi(versions[1])
+		num, err := strconv.Atoi(versions[1])
+		if err != nil {
+			return "", err
+		}
 		versions[1] = strconv.Itoa(num + 1)
 		versions[2] = "0"
 	case "patch":
-		num, _ := strconv.Atoi(versions[2])
+		num, err := strconv.Atoi(versions[2])
+		if err != nil {
+			return "", err
+		}
 		versions[2] = strconv.Itoa(num + 1)
 	}
 

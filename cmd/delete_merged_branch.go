@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// deleteMergedBranchCmd represents the deleteMergedBranch command
+// deleteMergedBranchCmd represents the deleteMergedBranch command.
 var deleteMergedBranchCmd = &cobra.Command{
 	Use:     "delete-merged-branch",
 	Aliases: []string{"mergedd"},

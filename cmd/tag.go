@@ -10,13 +10,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// tagCmd represents the tag command
+// tagCmd represents the tag command.
 var tagCmd = &cobra.Command{
 	Use:   "tag [<version>] [major|minor|patch]",
 	Short: "Auto increment tag version",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		isPush, _ := cmd.Flags().GetBool("push")
-		msg, _ := cmd.Flags().GetString("message")
+		isPush, err := cmd.Flags().GetBool("push")
+		if err != nil {
+			return err
+		}
+
+		msg, err := cmd.Flags().GetString("message")
+		if err != nil {
+			return err
+		}
 
 		if len(args) == 0 {
 			return errors.New("not found argument")
@@ -25,7 +32,7 @@ var tagCmd = &cobra.Command{
 		target := args[0]
 
 		u := usecase.NewGitUsecase()
-		_, err := u.VersionUp(target, msg, isPush)
+		_, err = u.VersionUp(target, msg, isPush)
 		if err != nil {
 			return err
 		}
