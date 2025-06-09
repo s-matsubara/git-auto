@@ -10,22 +10,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// deleteMergedBranchCmd represents the deleteMergedBranch command.
-var deleteMergedBranchCmd = &cobra.Command{
-	Use:     "delete-merged-branch",
-	Aliases: []string{"mergedd"},
-	Short:   "Delete merged branch",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		u := usecase.NewGitUsecase()
-		err := u.DeleteMergedBranches()
-		if err != nil {
-			return err
-		}
+// NewDeleteMergedBranchCmd represents the deleteMergedBranch command.
+func NewDeleteMergedBranchCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "delete-merged-branch",
+		Aliases: []string{"mergedd"},
+		Short:   "Delete merged branch",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			u := usecase.NewGitUsecase()
+			err := u.DeleteMergedBranches()
+			if err != nil {
+				return err
+			}
 
-		return nil
-	},
-}
+			return nil
+		},
+	}
 
-func init() {
-	rootCmd.AddCommand(deleteMergedBranchCmd)
+	return cmd
 }
