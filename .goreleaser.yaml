@@ -22,6 +22,9 @@ builds:
     ldflags:
       - -s
       - -w
+      - -X github.com/s-matsubara/git-auto/cmd.Version={{ .Version }}
+      - -X github.com/s-matsubara/git-auto/cmd.Commit={{ .ShortCommit }}
+      - -X github.com/s-matsubara/git-auto/cmd.BuildDate={{ .Date }}
 
 universal_binaries:
   - replace: true
