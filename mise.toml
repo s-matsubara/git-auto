@@ -33,9 +33,17 @@ run = "go fmt ./..."
 description = "Run static analysis using golangci-lint"
 run = "golangci-lint run ./..."
 
+[tasks.go-test]
+description = "Run unit tests with verbose output and coverage reporting"
+run = "go test ./..."
+
+[tasks.go-test-int]
+description = "Run integration tests with verbose output and coverage reporting"
+run = "INTEGRATION_TEST=true go test ./..."
+
 [tasks.go-test-all]
-description = "Run all Go tests in verbose mode with coverage reporting"
-run = "go test ./... -v -cover"
+description = "Run all unit and integration tests with verbose output and coverage reporting"
+run = "INTEGRATION_TEST=true go test ./... -v -cover"
 
 [tasks.update-go-deps]
 description = "Update dependencies, sync Go version, and tidy the module"
