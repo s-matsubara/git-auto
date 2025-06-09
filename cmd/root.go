@@ -19,6 +19,7 @@ func NewRootCmd() *cobra.Command {
 
 	cmd.AddCommand(NewTagCmd())
 	cmd.AddCommand(NewDeleteMergedBranchCmd())
+	cmd.AddCommand(NewVersionCmd())
 
 	return cmd
 }
