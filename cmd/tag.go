@@ -6,7 +6,7 @@ package cmd
 
 import (
 	"errors"
-	"git-auto/usecase"
+	"github.com/s-matsubara/git-auto/usecase"
 	"github.com/spf13/cobra"
 )
 

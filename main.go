@@ -1,10 +1,9 @@
 /*
 Copyright © 2023 matsubara
-
 */
 package main
 
-import "git-auto/cmd"
+import "github.com/s-matsubara/git-auto/cmd"
 
 func main() {
 	cmd.Execute()

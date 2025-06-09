@@ -1,4 +1,4 @@
-module git-auto
+module github.com/s-matsubara/git-auto
 
 go 1.24.3
 

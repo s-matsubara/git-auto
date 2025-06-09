@@ -5,8 +5,7 @@ Copyright © 2023 matsubara
 package cmd
 
 import (
-	"git-auto/usecase"
-
+	"github.com/s-matsubara/git-auto/usecase"
 	"github.com/spf13/cobra"
 )
 
