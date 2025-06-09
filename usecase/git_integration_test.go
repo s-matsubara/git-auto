@@ -9,7 +9,10 @@ import (
 	"testing"
 )
 
-const integrationEnv = "true"
+const (
+	integrationEnv    = "true"
+	integrationEnvVar = "INTEGRATION_TEST"
+)
 
 func gitCmd(dir string, args ...string) error {
 	cmd := exec.Command("git", args...)
@@ -53,7 +56,7 @@ func setupRepo(t *testing.T) (func(), string) {
 }
 
 func TestVersionUpIntegration(t *testing.T) {
-	if os.Getenv("INTEGRATION_TEST") != integrationEnv {
+	if os.Getenv(integrationEnvVar) != integrationEnv {
 		t.Skip("integration test")
 	}
 	cleanup, dir := setupRepo(t)
@@ -86,7 +89,7 @@ func TestVersionUpIntegration(t *testing.T) {
 }
 
 func TestDeleteMergedBranchesIntegration(t *testing.T) {
-	if os.Getenv("INTEGRATION_TEST") != integrationEnv {
+	if os.Getenv(integrationEnvVar) != integrationEnv {
 		t.Skip("integration test")
 	}
 	cleanup, dir := setupRepo(t)
@@ -140,7 +143,7 @@ func TestDeleteMergedBranchesIntegration(t *testing.T) {
 }
 
 func TestVersionUpPushIntegration(t *testing.T) {
-	if os.Getenv("INTEGRATION_TEST") != integrationEnv {
+	if os.Getenv(integrationEnvVar) != integrationEnv {
 		t.Skip("integration test")
 	}
 
