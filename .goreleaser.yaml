@@ -39,6 +39,7 @@ brews:
       bash_completion.install "completions/git-auto.bash" => "git-auto"
       zsh_completion.install "completions/git-auto.zsh" => "_git-auto"
       fish_completion.install "completions/git-auto.fish"
+    directory: Formula
     repository:
       owner: s-matsubara
       name: homebrew-tap
