@@ -34,7 +34,6 @@ homebrew_casks:
       bash: completions/git-auto.bash
       zsh: completions/git-auto.zsh
       fish: completions/git-auto.fish
-    directory: Formula
     repository:
       owner: s-matsubara
       name: homebrew-tap
