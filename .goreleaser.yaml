@@ -25,6 +25,10 @@ builds:
       - -X github.com/s-matsubara/git-auto/cmd.Version={{ .Version }}
       - -X github.com/s-matsubara/git-auto/cmd.Commit={{ .ShortCommit }}
       - -X github.com/s-matsubara/git-auto/cmd.BuildDate={{ .Date }}
+archives:
+  - format: tar.gz
+    files:
+      - completions/*
 
 universal_binaries:
   - replace: true
