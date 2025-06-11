@@ -29,16 +29,11 @@ builds:
 universal_binaries:
   - replace: true
 
-# The lines beneath this are called `modelines`. See `:help modeline`
-# Feel free to remove those if you don't want/use them.
-# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
-# vim: set ts=2 sw=2 tw=0 fo=cnqoj
-brews:
-  - install: |
-      bin.install "git-auto"
-      bash_completion.install "completions/git-auto.bash" => "git-auto"
-      zsh_completion.install "completions/git-auto.zsh" => "_git-auto"
-      fish_completion.install "completions/git-auto.fish"
+homebrew_casks:
+  - completions:
+      bash: completions/git-auto.bash
+      zsh: completions/git-auto.zsh
+      fish: completions/git-auto.fish
     directory: Formula
     repository:
       owner: s-matsubara
